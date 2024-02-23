@@ -2,3 +2,9 @@
 .vscode
 data-staging
 node_modules
+
+.env
+
+__pycache__
+pcpart_types
+data/pc_parts.db3

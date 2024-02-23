@@ -57,10 +57,12 @@ Check out [API.md](./API.md) for JSON property descriptions of each product cate
 > **Warning**
 > Make sure to turn on your VPN before running this scraper!
 
-1. Run `npm install`
-2. Run `npm run start`
+1. Run `yarn`
+2. Run `yarn start`
 3. Wait about 5-10 minutes for the scraper to finish doing its thing.
 4. Everything will be emitted to a directory named `data-staging`.
+
+5. Run `json2sqlite.py` to build `pc_parts.db3`. (Optional. Requires `xsdata` to be installed.)
 
 If you don't want to scrape every part, you can specify individual parts by passing them as arguments. You can find the list of part type IDs in [API.md](./API.md).
 
@@ -68,7 +70,7 @@ Example usage:
 
 ```sh
 # Only get CPUs and video cards
-npm run start -- cpu video-card
+yarn start -- cpu video-card
 ```
 
 ## `package.json` Scripts

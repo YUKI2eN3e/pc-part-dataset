@@ -12,7 +12,11 @@ import {
 } from './serializers'
 import type { Part, PartType, SerializationMap } from './types'
 
-const BASE_URL = 'https://pcpartpicker.com/products'
+import dotenv from 'dotenv'
+dotenv.config()
+const BASE_URL = process.env['BASE_URL']
+
+const BASE_PRODUCTS_URL = `${BASE_URL}/products`
 const STAGING_DIRECTORY = 'data-staging'
 const ALL_ENDPOINTS: PartType[] = [
 	'cpu',
@@ -82,7 +86,7 @@ async function scrapeInParallel(endpoints: PartType[]) {
 		)
 	})
 
-	cluster.queue('https://pcpartpicker.com', async ({ page, data }) => {
+	cluster.queue(BASE_URL, async ({ page, data }) => {
 		const res = await page.goto(data)
 
 		try {
@@ -121,7 +125,7 @@ async function* scrape(endpoint: PartType, page: Page): AsyncGenerator<Part[]> {
 		}
 	})
 
-	await page.goto(`${BASE_URL}/${endpoint}`)
+	await page.goto(`${BASE_PRODUCTS_URL}/${endpoint}`)
 
 	const paginationEl = await page.waitForSelector('.pagination', {
 		timeout: 5000,
@@ -139,7 +143,7 @@ async function* scrape(endpoint: PartType, page: Page): AsyncGenerator<Part[]> {
 		const pageProducts: Part[] = []
 
 		if (currentPage > 1) {
-			await page.goto(`${BASE_URL}/${endpoint}/#page=${currentPage}`)
+			await page.goto(`${BASE_PRODUCTS_URL}/${endpoint}/#page=${currentPage}`)
 			await page.waitForNetworkIdle()
 		}
 
